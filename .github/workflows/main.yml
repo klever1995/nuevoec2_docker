@@ -36,10 +36,8 @@ jobs:
     needs: update_docker_image
 
     steps:
-      - name: Parse EC2 Instances
-        id: parse_ec2
-        run: |
-          echo "instances='${{ secrets.EC2_INSTANCES }}'" >> $GITHUB_ENV
+      - name: Set EC2 Instances as environment variables
+        run: echo "EC2_INSTANCES=${{ secrets.EC2_INSTANCES }}" >> $GITHUB_ENV  # Set the EC2 instances as an environment variable
 
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.3
@@ -61,4 +59,4 @@ jobs:
 
     strategy:
       matrix:
-        instance: ${{ fromJson(secrets.EC2_INSTANCES) }}   # Corrige esta línea
+        instance: ${{ fromJson(env.EC2_INSTANCES) }}  # Use the environment variable here
