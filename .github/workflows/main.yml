@@ -39,7 +39,7 @@ jobs:
       - name: Parse EC2 Instances
         id: parse_ec2
         run: |
-          echo "instances=$(echo '${{ secrets.EC2_INSTANCES }}' | tr ',' '\n')" >> $GITHUB_ENV
+          echo "instances='${{ secrets.EC2_INSTANCES }}'" >> $GITHUB_ENV
 
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.3
