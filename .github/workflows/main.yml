@@ -61,4 +61,4 @@ jobs:
 
     strategy:
       matrix:
-        instance: ${{ fromJson(env.instances) }}
+        instance: ${{ fromJson(secrets.EC2_INSTANCES) }}   # Corrige esta línea
