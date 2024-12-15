@@ -1,4 +1,4 @@
-name: Test Deploy Pull Request
+name: test Deploy pull request
 
 on:
   pull_request:
@@ -35,22 +35,22 @@ jobs:
     runs-on: ubuntu-latest
     needs: update_docker_image
 
-    steps:
-      # Parse EC2 Instances and set as an environment variable
-      - name: Parse EC2 Instances for Test
-        id: parse_ec2_test
-        run: |
-          echo "EC2_INSTANCES_TEST=$(echo '${{ secrets.EC2_INSTANCESTEST }}' | jq -R -s -c 'split(",")')" >> $GITHUB_ENV
+    strategy:
+      matrix:
+        ec2_instance: 
+          - ec2-54-90-194-248.compute-1.amazonaws.com
+          - ec2-54-144-93-253.compute-1.amazonaws.com
 
-      - name: Set up SSH key for Test
+    steps:
+      - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Deploy to EC2 for Test
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ matrix.instance }}
+          host: ${{ matrix.ec2_instance }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
@@ -59,7 +59,3 @@ jobs:
             sudo docker rm php_test || true
             sudo docker pull byvoxel/php_test:latest
             sudo docker run -d --name php_test -p 80:80 byvoxel/php_test:latest
-
-    strategy:
-      matrix:
-        instance: ${{ fromJson(env.EC2_INSTANCES_TEST) }}  # Use the parsed EC2 instance list
