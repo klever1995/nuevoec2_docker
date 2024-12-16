@@ -30,6 +30,7 @@
     <div class="container">
         <h1>autoscaling Test!</h1>
         <p>El nombre del host es: <?php echo gethostname(); ?></p>
+        <h1>ola desde el otro lado</h1>
     </div>
 </body>
 </html>
